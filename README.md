@@ -22,7 +22,7 @@ const now: Date = new Date();
 const filteredIcsContent: string = icsFilter(icsContent, now);
 
 // with setting a max date, the filter will also filter out events that are too far in the future
-const maxDate = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000); // 2 weeks from now
+const maxDate: Date = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000); // 2 weeks from now
 const filteredIcsContentWithMaxDate: string = icsFilter(icsContent, now, maxDate);
 ```
 
