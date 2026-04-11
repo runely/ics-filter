@@ -15,7 +15,22 @@
     "test": "npm run build && node --test dist/tests/**/*.test.js",
     "test-run": "npm run build && env NODE_ENV=development node ./test.raw.js"
   },
-  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/runely/ics-filter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/runely/ics-filter/issues"
+  },
+  "homepage": "https://github.com/runely/ics-filter/#readme",
+  "keywords": [
+    "ics",
+    "ical",
+    "icalendar",
+    "filter",
+    "calendar",
+    "events"
+  ],
   "author": {
     "name": "Rune Moskvil Lyngås",
     "email": "runely85@gmail.com",
