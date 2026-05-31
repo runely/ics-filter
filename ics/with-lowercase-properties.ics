@@ -1,0 +1,23 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Test//Test//EN
+BEGIN:VEVENT
+dtstart:20200101T100000Z
+dtend:20200101T110000Z
+uid:lowercase-past@test
+summary:Past event with lowercase properties
+END:VEVENT
+BEGIN:VEVENT
+dtstart:20300101T100000Z
+dtend:20300101T110000Z
+uid:lowercase-future@test
+summary:Future event with lowercase properties
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20200601T120000Z
+DTEND:20200601T130000Z
+UID:uppercase-past@test
+rrule:FREQ=YEARLY
+SUMMARY:Past recurring event with lowercase rrule
+END:VEVENT
+END:VCALENDAR

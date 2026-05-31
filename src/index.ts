@@ -45,9 +45,10 @@ export const icsFilter = (content: string, now: Date, max?: Date): string => {
 
   function processLine(line: string): void {
     line = line.trim();
+    const lineUpper: string = line.toUpperCase();
 
     // --- BEGIN EVENT ---
-    if (line === "BEGIN:VEVENT") {
+    if (lineUpper === "BEGIN:VEVENT") {
       inEvent = true;
       eventStartIndex = findLineStartIndex(line);
       if (isDevRun) {
@@ -62,7 +63,7 @@ export const icsFilter = (content: string, now: Date, max?: Date): string => {
     }
 
     // --- END EVENT ---
-    if (line === "END:VEVENT") {
+    if (lineUpper === "END:VEVENT") {
       const eventEndIndex: number = findLineEndIndex(line);
       if (isDevRun) {
         if (inEvent && keep && rruleKeep) {
@@ -91,7 +92,7 @@ export const icsFilter = (content: string, now: Date, max?: Date): string => {
     }
 
     // --- PARSING ---
-    if (line.startsWith("SUMMARY")) {
+    if (lineUpper.startsWith("SUMMARY")) {
       const value: string | null = extractValue(line);
       if (isDevRun) {
         console.log("SUMMARY:", value);
@@ -100,7 +101,7 @@ export const icsFilter = (content: string, now: Date, max?: Date): string => {
       return;
     }
 
-    if (line.startsWith("DTSTART")) {
+    if (lineUpper.startsWith("DTSTART")) {
       const value: string | null = extractValue(line);
       const dtStart: string | null = normalizeICSDateStr(value);
       if (isDevRun) {
@@ -125,7 +126,7 @@ export const icsFilter = (content: string, now: Date, max?: Date): string => {
       return;
     }
 
-    if (line.startsWith("DTEND")) {
+    if (lineUpper.startsWith("DTEND")) {
       const value: string | null = extractValue(line);
       const dtEnd: string | null = normalizeICSDateStr(value);
       if (isDevRun) {
@@ -158,7 +159,7 @@ export const icsFilter = (content: string, now: Date, max?: Date): string => {
       return;
     }
 
-    if (line.startsWith("RRULE")) {
+    if (lineUpper.startsWith("RRULE")) {
       const idx: number = line.indexOf("UNTIL=");
 
       keep = true;
@@ -187,7 +188,7 @@ export const icsFilter = (content: string, now: Date, max?: Date): string => {
       return;
     }
 
-    if (line.startsWith("RECURRENCE-ID")) {
+    if (lineUpper.startsWith("RECURRENCE-ID")) {
       const value: string | null = extractValue(line);
       const dtRecurrence: string | null = normalizeICSDateStr(value);
       if (isDevRun) {
@@ -218,7 +219,7 @@ export const icsFilter = (content: string, now: Date, max?: Date): string => {
       return;
     }
 
-    if (line.startsWith("STATUS:CANCELLED")) {
+    if (lineUpper.startsWith("STATUS:CANCELLED")) {
       keep = false;
     }
   }
