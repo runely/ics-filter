@@ -18,6 +18,8 @@ export const icsFilter = (content: string, now: Date, max?: Date): string => {
 
   let keep: boolean = true;
   let hasRrule: boolean = false;
+  let hasRdate: boolean = false;
+  let rdateKeep: boolean = false;
   let hasKeptRecurrenceId: boolean = false;
   let rruleKeep: boolean = true;
 
@@ -57,6 +59,8 @@ export const icsFilter = (content: string, now: Date, max?: Date): string => {
 
       keep = true;
       hasRrule = false;
+      hasRdate = false;
+      rdateKeep = false;
       hasKeptRecurrenceId = false;
       rruleKeep = true;
       return;
@@ -142,6 +146,14 @@ export const icsFilter = (content: string, now: Date, max?: Date): string => {
           return;
         }
 
+        if (hasRdate && rdateKeep) {
+          if (isDevRun) {
+            console.log("DTEND lower than now, but rdate keeps it:", dtEnd, nowStr, "-->", line);
+          }
+
+          return;
+        }
+
         if (hasKeptRecurrenceId) {
           if (isDevRun) {
             console.log("DTEND lower than now, but recurrenceId keeps it:", dtEnd, nowStr, "-->", line);
@@ -183,6 +195,39 @@ export const icsFilter = (content: string, now: Date, max?: Date): string => {
       if (rruleUntil && rruleUntil < nowStr) {
         keep = false;
         rruleKeep = false;
+      }
+
+      return;
+    }
+
+    if (lineUpper.startsWith("RDATE")) {
+      const value: string | null = extractValue(line);
+      if (!value) {
+        return;
+      }
+
+      hasRdate = true;
+
+      for (const dateRaw of value.split(",")) {
+        const date: string | null = normalizeICSDateStr(dateRaw.trim());
+        if (!date) {
+          continue;
+        }
+
+        if (date >= nowStr && (!maxStr || date <= maxStr)) {
+          rdateKeep = true;
+          keep = true;
+
+          if (isDevRun) {
+            console.log("RDATE date in range:", date, "-->", line);
+          }
+
+          break;
+        }
+      }
+
+      if (isDevRun && !rdateKeep) {
+        console.log("RDATE: no dates in range", "-->", line);
       }
 
       return;
