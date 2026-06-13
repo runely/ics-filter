@@ -34,4 +34,15 @@ describe("icsFilter on ics content with RDATE properties and max limit", () => {
     assert.ok(!filteredMaxContent.includes("rdate-value-date@test"), "Event with RDATE;VALUE=DATE dates beyond max should be dropped");
     assert.ok(!filteredMaxContent.includes("rdate-period@test"), "Event with RDATE;VALUE=PERIOD dates beyond max should be dropped");
   });
+
+  test("should keep RDATE;VALUE=PERIOD when the start date is within max", () => {
+    const now = new Date("2025-01-01T00:00:00.000Z");
+    const max = new Date("2030-06-01T10:00:00.000Z");
+    const periodContent =
+      "BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nUID:period-within-max@test\nDTSTART:20200601T100000Z\nDTEND:20200601T120000Z\nRDATE;VALUE=PERIOD:20300601T100000Z/20300601T120000Z\nEND:VEVENT\nEND:VCALENDAR";
+
+    const filtered = icsFilter(periodContent, now, max);
+
+    assert.ok(filtered.includes("period-within-max@test"), "Event with PERIOD RDATE starting at max should be kept");
+  });
 });

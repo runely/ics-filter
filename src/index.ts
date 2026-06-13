@@ -288,11 +288,15 @@ const normalizeICSDateStr = (value: string | null | undefined): string | null =>
     return null;
   }
 
-  if (value.length === 8) {
-    return `${value}T000000Z`;
+  // For VALUE=PERIOD, compare against the period start date only.
+  // The end value is not relevant for the now/max window checks here.
+  const normalizedValue: string = value.split("/")[0] ?? value;
+
+  if (normalizedValue.length === 8) {
+    return `${normalizedValue}T000000Z`;
   }
 
-  return value;
+  return normalizedValue;
 };
 
 const toICSDateString = (date: Date): string => {
