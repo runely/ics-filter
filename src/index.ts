@@ -284,7 +284,8 @@ export const icsFilter = (content: string, now: Date, max?: Date): string => {
 };
 
 const extractValue = (line: string): string | null => {
-  const idx: number = line.indexOf(":");
+  const hasQuotes: boolean = line.includes('"');
+  const idx: number = hasQuotes ? line.lastIndexOf(":") : line.indexOf(":");
   return idx !== -1 ? line.slice(idx + 1) : null;
 };
 
